@@ -22,11 +22,18 @@
 body { font-family: var(--body-font); background-color: var(--black-color); color: var(--white-color); font-weight: var(--font-bold); overflow: hidden; }
 
 /* Ajuste para el contenedor principal en pantallas grandes */
+/* Ajuste para el contenedor principal en pantallas grandes */
 #chat-container {
-  width: 60%;
-  max-width: 800px;
-  height: 75vh; 
+  /* ANTES: width: 60%; max-width: 800px; */
+
+  /* AHORA: Le damos más anchura */
+  width: 75%; /* Ocupa más espacio horizontal */
+  max-width: 1100px; /* Aumentamos el límite máximo para pantallas muy grandes */
+
+  /* La altura se mantiene igual */
+  height: 75vh;
   min-height: 600px;
+
   position: relative;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.9);
