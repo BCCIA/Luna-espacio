@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sulfi</title>
+    <!-- Asegúrate de tener este icono o cambiar la ruta -->
+    <link rel="shortcut icon" href="./chat.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Animaciones de entrada GSAP -->
+    <div class="overlay first"></div>
+    <div class="overlay second"></div>
+    <div class="overlay third"></div>
+
+    <main class="l-main bd-grid">
+      <div class="home">
+        <div class="home-information">
+          <span class="home-pressent anime-text">Mi nombre es</span>
+          <h1 class="home-title anime-text">Sulfi.</h1>
+        </div>
+
+        <!-- CONTENEDOR PRINCIPAL ESTILO CRISTAL -->
+        <div class="home-img">
+            <div id="chat-container" class="fade-in" style="position: relative; overflow: hidden;">
+
+                <!-- 🔥 OVERLAY MINIMALISTA CON IMAGEN 🔥 -->
+                <div id="interaction-overlay" class="interaction-overlay">
+                    <div class="interaction-content">
+                        
+                        <!-- ✅ NUEVO: IMAGEN SUTIL DEL AVATAR ✅ -->
+                        <!-- Reemplaza 'avatar-preview.png' con tu imagen real -->
+                        <img src="./avatar-preview.png" alt="Avatar Preview" class="overlay-avatar-img">
+
+                        <!-- Texto de bienvenida -->
+                        <h3>Hola, selecciona una opción:</h3>
+                        
+                        <div class="interaction-buttons">
+                            <!-- Botón 1: Conversar -->
+                            <button id="btn-show-avatar" class="interact-btn glass-btn">
+                                <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+                                Conversar
+                            </button>
+                            
+                            <!-- Botón 2: Ver Video -->
+                            <button id="btn-play-video" class="interact-btn glass-btn">
+                                <ion-icon name="play-circle-outline"></ion-icon>
+                                Foto
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🔥 REPRODUCTOR DE VIDEO SIN CONTROLES 🔥 -->
+                <!-- Se quitó el atributo 'controls' -->
+                <video id="playback-video" class="playback-video video-hidden" playsinline></video>
+
+                <!-- El iframe del avatar interactivo se cargará detrás -->
+            </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Botón refrescar -->
+    <ion-icon id="refresh-btn" name="refresh-circle-outline" title="Actualizar página"></ion-icon>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
