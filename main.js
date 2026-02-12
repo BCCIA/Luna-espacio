@@ -58,12 +58,20 @@ class DIDChat {
     this.init();
   }
   init() { if (this.container) this.createIframe(); }
-  createIframe() {
+  // ... dentro de la clase DIDChat ...
+createIframe() {
     const wrapper = document.createElement("div"); wrapper.className = "iframe-wrapper";
-    this.iframe = document.createElement("iframe"); this.iframe.className = "did-chat-iframe fade-in";
-    this.iframe.src = this.chatUrl; this.iframe.allow = "autoplay *; encrypted-media *; fullscreen *;";
-    this.iframe.title = "Avatar Interface"; wrapper.appendChild(this.iframe); this.container.appendChild(wrapper);
-  }
+    this.iframe = document.createElement("iframe");
+    this.iframe.className = "did-chat-iframe fade-in";
+    this.iframe.src = this.chatUrl;
+
+    // ✅ SOLUCIÓN MICROFONO: Se añade 'microphone *;' a los permisos del iframe
+    this.iframe.allow = "microphone *; autoplay *; encrypted-media *; fullscreen *; display-capture *;";
+
+    this.iframe.title = "Avatar Interface";
+    wrapper.appendChild(this.iframe);
+    this.container.appendChild(wrapper);
+}
 }
 
 // ==================================================================
