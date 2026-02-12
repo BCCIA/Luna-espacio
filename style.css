@@ -21,19 +21,12 @@
 *, ::before, ::after { margin: 0; padding: 0; box-sizing: border-box; text-decoration: none; list-style: none; }
 body { font-family: var(--body-font); background-color: var(--black-color); color: var(--white-color); font-weight: var(--font-bold); overflow: hidden; }
 
-/* Ajuste para el contenedor principal en pantallas grandes */
-/* Ajuste para el contenedor principal en pantallas grandes */
+/* Ajuste del contenedor principal (más ancho) */
 #chat-container {
-  /* ANTES: width: 60%; max-width: 800px; */
-
-  /* AHORA: Le damos más anchura */
-  width: 75%; /* Ocupa más espacio horizontal */
-  max-width: 1100px; /* Aumentamos el límite máximo para pantallas muy grandes */
-
-  /* La altura se mantiene igual */
+  width: 75%;
+  max-width: 1100px;
   height: 75vh;
   min-height: 600px;
-
   position: relative;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.9);
@@ -60,9 +53,6 @@ img { max-width: 100%; height: auto; }
 .second { background-color: var(--first-color); left: 33.3%; }
 .third { background-color: var(--first-color); left: 66.6%; }
 
-#refresh-btn { position: fixed; top: 30px; right: 30px; font-size: 45px; color: white; background: transparent; border: none; cursor: pointer; z-index: 9999; opacity: 0.7; transition: all 0.3s ease; }
-#refresh-btn:hover { opacity: 1; transform: rotate(20deg) scale(1.1); }
-
 @media screen and (max-width: 1024px) {
     .home { grid-template-columns: 1fr; grid-template-rows: max-content 1fr; gap: 2rem; padding-top: 2rem;}
     .home-img { align-items: flex-start; }
@@ -71,87 +61,102 @@ img { max-width: 100%; height: auto; }
 }
 
 /* =========================================
-   NUEVOS ESTILOS MINIMALISTAS
+   ✅ NUEVOS ESTILOS: CONTROL Y BLOQUEO ✅
    ========================================= */
 
-/* --- Capa Superpuesta (Overlay) --- */
+/* --- Capa de Bloqueo Invisible --- */
+#lock-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    /* Z-index 100: Debe ser el más alto dentro del contenedor para bloquear todo */
+    z-index: 100;
+    background: transparent; /* Invisible */
+    cursor: pointer; /* Manito para indicar que se puede clicar */
+}
+
+/* Clase para desactivar el bloqueo una vez puesto el PIN */
+#lock-overlay.unlocked {
+    display: none; /* Se quita completamente */
+    pointer-events: none;
+}
+
+
+/* --- Contenedor y Botones de Control (Esquina superior derecha) --- */
+.control-buttons {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    display: flex;
+    gap: 15px; /* Separación entre botones */
+    z-index: 9999;
+}
+
+.ctrl-icon {
+    font-size: 40px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+}
+
+.ctrl-icon:hover {
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Estilo específico para el botón de refrescar al hacer hover */
+#refresh-btn:hover {
+    transform: rotate(45deg) scale(1.1);
+}
+
+
+/* =========================================
+   ESTILOS MINIMALISTAS (Overlay y Video)
+   ========================================= */
+
+/* --- Capa Superpuesta (Overlay del Menú) --- */
 .interaction-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
   background: rgba(20, 20, 20, 0.25);
   backdrop-filter: blur(8px);
   border-radius: inherit;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 50;
+  display: flex; justify-content: center; align-items: center;
+  z-index: 50; /* Debe ser menor que el lock-overlay (100) */
   transition: all 0.6s ease-in-out;
 }
 
 .overlay-hidden {
   opacity: 0;
-  visibility: hidden;
+  z-index: -1 !important;
   pointer-events: none;
 }
 
 .interaction-content {
-  text-align: center;
-  color: var(--white-color);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  text-align: center; color: var(--white-color); width: 100%;
+  display: flex; flex-direction: column; align-items: center;
   text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .overlay-avatar-img {
-    max-height: 180px; 
-    width: auto;
-    margin-bottom: 1.5rem; 
-    opacity: 0.85; 
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
-    transition: transform 0.3s ease;
+    max-height: 180px; width: auto; margin-bottom: 1.5rem; opacity: 0.85;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2)); transition: transform 0.3s ease;
 }
+.interaction-content:hover .overlay-avatar-img { transform: translateY(-5px) scale(1.02); opacity: 1; }
 
-.interaction-content:hover .overlay-avatar-img {
-    transform: translateY(-5px) scale(1.02);
-    opacity: 1;
-}
-
-.interaction-content h3 {
-  font-size: 1.8rem;
-  margin-bottom: 2.5rem;
-  font-weight: 500;
-  letter-spacing: 1px;
-}
-
-.interaction-buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-  justify-content: center;
-  width: 80%;
-}
+.interaction-content h3 { font-size: 1.8rem; margin-bottom: 2.5rem; font-weight: 500; letter-spacing: 1px; }
+.interaction-buttons { display: flex; flex-direction: row; gap: 30px; justify-content: center; width: 80%; }
 
 .glass-btn {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
   width: 140px; height: 120px; padding: 15px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
+  background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); backdrop-filter: blur(5px);
   font-family: var(--body-font); font-size: 0.9rem; font-weight: 500; color: white;
   cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
 }
-
 .glass-btn ion-icon { font-size: 2.5rem; opacity: 0.9; }
-
-.glass-btn:hover {
-  background: rgba(255, 255, 255, 0.25); transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(31, 101, 194, 0.3); border-color: rgba(255, 255, 255, 0.5);
-}
-
+.glass-btn:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-5px); box-shadow: 0 8px 25px rgba(31, 101, 194, 0.3); border-color: rgba(255, 255, 255, 0.5); }
 .glass-btn:active { transform: translateY(-2px); background: rgba(255, 255, 255, 0.1); }
 
 @media screen and (max-width: 768px) {
@@ -162,20 +167,10 @@ img { max-width: 100%; height: auto; }
     .overlay-avatar-img { max-height: 120px; margin-bottom: 1rem; }
 }
 
-/* --- Estilos del Reproductor de Video SIN CONTROLES --- */
+/* --- Reproductor de Video --- */
 .playback-video {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    object-fit: cover; /* Rellena el espacio sin marcos negros */
-    border-radius: inherit;
-    z-index: 40;
-    background: #000;
-    transition: opacity 0.5s ease;
-    pointer-events: none; 
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover; border-radius: inherit; z-index: 40;
+    background: #000; transition: opacity 0.5s ease; pointer-events: none;
 }
-
-/* ✅ CLASE AÑADIDA PARA OCULTAR EL VIDEO SUAVEMENTE ✅ */
-.video-hidden {
-    opacity: 0;
-    visibility: hidden; /* Usamos visibility para permitir la transición de opacidad */
-}
+.video-hidden { opacity: 0; visibility: hidden; }
