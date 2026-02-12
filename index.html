@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Luna</title>
-    <!-- Asegúrate de tener este icono o cambiar la ruta -->
     <link rel="shortcut icon" href="./chat.png" />
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -23,52 +22,62 @@
 
         <!-- CONTENEDOR PRINCIPAL ESTILO CRISTAL -->
         <div class="home-img">
-            <div id="chat-container" class="fade-in" style="position: relative; overflow: hidden;">
+            <div id="chat-container" class="fade-in">
 
-                <!-- 🔥 OVERLAY MINIMALISTA CON IMAGEN 🔥 -->
+                <!-- ✅ NUEVO: CAPA DE BLOQUEO INVISIBLE ✅ -->
+                <!-- Esta capa está encima de todo al inicio. Al hacer clic, pide el PIN. -->
+                <!-- Debe ser el primer elemento aquí dentro. -->
+                <div id="lock-overlay" title="Toque para iniciar sesión"></div>
+
+
+                <!-- --- ELEMENTOS INTERACTIVOS (OCULTOS AL INICIO POR EL LOCK-OVERLAY) --- -->
+
+                <!-- Overlay Minimalista con menú -->
                 <div id="interaction-overlay" class="interaction-overlay">
                     <div class="interaction-content">
-                        
-                        <!-- ✅ NUEVO: IMAGEN SUTIL DEL AVATAR ✅ -->
-                        <!-- Reemplaza 'avatar-preview.png' con tu imagen real -->
+                        <!-- Imagen sutil del avatar -->
                         <img src="./avatar-preview.png" alt="Avatar Preview" class="overlay-avatar-img">
-
                         <!-- Texto de bienvenida -->
                         <h3>Hola, selecciona una opción:</h3>
-                        
                         <div class="interaction-buttons">
                             <!-- Botón 1: Conversar -->
                             <button id="btn-show-avatar" class="interact-btn glass-btn">
                                 <ion-icon name="chatbox-ellipses-outline"></ion-icon>
                                 Conversar
                             </button>
-                            
-                            <!-- Botón 2: Ver Video -->
+                            <!-- Botón 2: Foto (Video) -->
                             <button id="btn-play-video" class="interact-btn glass-btn">
-                                <ion-icon name="play-circle-outline"></ion-icon>
+                                <ion-icon name="camera-outline"></ion-icon>
                                 Foto
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- 🔥 REPRODUCTOR DE VIDEO SIN CONTROLES 🔥 -->
-                <!-- Se quitó el atributo 'controls' -->
+                <!-- Reproductor de Video sin controles -->
                 <video id="playback-video" class="playback-video video-hidden" playsinline></video>
 
-                <!-- El iframe del avatar interactivo se cargará detrás -->
+                <!-- El iframe del avatar de D-ID se cargará aquí detrás -->
             </div>
         </div>
       </div>
     </main>
 
-    <!-- Botón refrescar -->
-    <ion-icon id="refresh-btn" name="refresh-circle-outline" title="Actualizar página"></ion-icon>
+    <!-- ✅ NUEVO: CONTENEDOR DE BOTONES DE CONTROL (ESQUINA SUPERIOR DERECHA) ✅ -->
+    <div class="control-buttons">
+      <!-- Botón de Bloquear Sesión -->
+      <ion-icon id="lock-btn" class="ctrl-icon" name="lock-closed-outline" title="Bloquear sesión"></ion-icon>
+      <!-- Botón de Limpiar Caché y Recargar -->
+      <ion-icon id="refresh-btn" class="ctrl-icon" name="refresh-circle-outline" title="Limpiar caché y recargar"></ion-icon>
+    </div>
+
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!-- Iconos Ionicons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <!-- Script Principal -->
     <script src="main.js"></script>
   </body>
 </html>
