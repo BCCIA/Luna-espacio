@@ -19,7 +19,7 @@ function desbloquearVisualmente() {
     console.log("Sesión desbloqueada.");
 }
 
-// ✅ NUEVA FUNCIÓN: Muestra el modal personalizado en lugar de prompt()
+// Muestra el modal personalizado en lugar de prompt()
 function solicitarPin() {
     if (pinModal && pinInput) {
         pinInput.value = ""; // Limpiar input anterior
@@ -28,7 +28,7 @@ function solicitarPin() {
     }
 }
 
-// ✅ NUEVA FUNCIÓN: Verifica el PIN introducido en el input
+// Verifica el PIN introducido en el input
 function verificarPin() {
     const pinIngresado = pinInput.value;
     if (pinIngresado === PIN_CORRECTO) {
@@ -84,33 +84,37 @@ document.addEventListener("DOMContentLoaded", () => {
   if (accesoPermitido()) {
       desbloquearVisualmente();
   } else {
-      // Si está bloqueado, activar el trigger al hacer clic en la capa invisible
       if (lockOverlay) lockOverlay.addEventListener("click", solicitarPin);
   }
 
-  // ✅ LISTENERS PARA EL MODAL DE PIN ✅
+  // Listeners para el modal de PIN
   if (pinSubmitBtn && pinInput) {
-      // Clic en el botón "Desbloquear"
       pinSubmitBtn.addEventListener("click", verificarPin);
-      // Pulsar "Enter" en el input
       pinInput.addEventListener("keypress", (e) => {
           if (e.key === "Enter") verificarPin();
       });
   }
 
+  // ✅ 3. Botones de Control (Bloquear y Refrescar) ACTUALIZADOS ✅
 
-  // 3. Botones de Control (Bloquear y Refrescar)
+  // Botón del Candado: Bloquea la sesión
   if (lockBtn) {
       lockBtn.addEventListener("click", () => {
           if (confirm("¿Deseas bloquear la sesión actual?")) {
-              localStorage.removeItem(STORAGE_KEY_AUTH);
-              location.reload();
+              localStorage.removeItem(STORAGE_KEY_AUTH); // BORRA el permiso
+              location.reload(); // Recarga y bloquea
           }
       });
   }
+
+  // Botón de Refrescar: Limpia caché PERO MANTIENE la sesión
   if (refreshBtn) {
       refreshBtn.addEventListener("click", () => {
-          localStorage.removeItem(STORAGE_KEY_AUTH);
+          // ✅ CAMBIO AQUÍ: Ya no borramos el STORAGE_KEY_AUTH
+          // localStorage.removeItem(STORAGE_KEY_AUTH); <- Línea eliminada
+
+          // 'true' fuerza una recarga desde el servidor (limpia caché de assets)
+          // pero el localStorage se mantiene intacto.
           location.reload(true);
       });
   }
@@ -125,10 +129,15 @@ document.addEventListener("DOMContentLoaded", () => {
   gsap.from("#chat-container", { opacity: 0, duration: 1.5, delay: 1.5, y: 50, ease: "power3.out" });
   gsap.from(".control-buttons", { opacity: 0, duration: 1, delay: 2, x: 50, ease: "power3.out" });
 
+  // El auto-refresco por inactividad SÍ debe bloquear la sesión por seguridad
   let inactivityTimeout;
   function resetInactivityTimer() {
       clearTimeout(inactivityTimeout);
-      inactivityTimeout = setTimeout(() => location.reload(), 5 * 60 * 1000);
+      inactivityTimeout = setTimeout(() => {
+          // Si es por inactividad, borramos el permiso para que pida PIN al volver
+          localStorage.removeItem(STORAGE_KEY_AUTH);
+          location.reload();
+      }, 5 * 60 * 1000); // 5 minutos
   }
   if (accesoPermitido()) {
      ['click', 'touchstart', 'mousemove', 'keydown'].forEach(evt => document.addEventListener(evt, resetInactivityTimer, { passive: true }));
