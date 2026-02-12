@@ -21,6 +21,7 @@
 *, ::before, ::after { margin: 0; padding: 0; box-sizing: border-box; text-decoration: none; list-style: none; }
 body { font-family: var(--body-font); background-color: var(--black-color); color: var(--white-color); font-weight: var(--font-bold); overflow: hidden; }
 
+/* Ajuste del contenedor principal */
 #chat-container {
   width: 75%; max-width: 1100px; height: 75vh; min-height: 600px;
   position: relative; overflow: hidden;
@@ -55,12 +56,14 @@ img { max-width: 100%; height: auto; }
 /* =========================================
    ESTILOS: CONTROL Y BLOQUEO
    ========================================= */
+/* Capa invisible para detectar clic inicial */
 #lock-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     z-index: 100; background: transparent; cursor: pointer;
 }
 #lock-overlay.unlocked { display: none; pointer-events: none; }
 
+/* Botones de control esquina superior derecha */
 .control-buttons {
     position: fixed; top: 30px; right: 30px; display: flex; gap: 15px; z-index: 9999;
 }
@@ -70,6 +73,43 @@ img { max-width: 100%; height: auto; }
 }
 .ctrl-icon:hover { color: white; transform: scale(1.1); }
 #refresh-btn:hover { transform: rotate(45deg) scale(1.1); }
+
+/* =========================================
+   ESTILOS: MODAL DE PIN (Contraseña oculta)
+   ========================================= */
+.pin-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85); z-index: 11000;
+    display: flex; justify-content: center; align-items: center;
+    opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.4s ease;
+}
+.pin-modal.active { opacity: 1; visibility: visible; pointer-events: auto; }
+
+.pin-modal-content {
+    background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2); padding: 40px; border-radius: 20px;
+    text-align: center; color: white; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    transform: translateY(30px); transition: transform 0.4s ease;
+}
+.pin-modal.active .pin-modal-content { transform: translateY(0); }
+
+.pin-icon { font-size: 3rem; color: var(--first-color); margin-bottom: 1rem; }
+.pin-modal-content h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.pin-modal-content p { margin-bottom: 1.5rem; opacity: 0.8; }
+
+#pin-input {
+    width: 100%; padding: 15px; font-size: 1.5rem; text-align: center;
+    border: none; border-radius: 10px; margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.9); color: #333; letter-spacing: 5px;
+    outline: none; transition: box-shadow 0.3s;
+}
+#pin-input:focus { box-shadow: 0 0 0 3px rgba(31, 101, 194, 0.5); }
+.pin-btn {
+    width: 100%; padding: 15px; border: none; border-radius: 10px;
+    background: var(--first-color); color: white; font-size: 1.1rem; font-weight: 600;
+    cursor: pointer; transition: background 0.3s;
+}
+.pin-btn:hover { background: #164a91; }
 
 
 /* =========================================
@@ -81,6 +121,7 @@ img { max-width: 100%; height: auto; }
   border-radius: inherit; display: flex; justify-content: center; align-items: center;
   z-index: 50; transition: all 0.6s ease-in-out;
 }
+/* Se usa z-index negativo para permitir clics en el avatar cuando se oculta */
 .overlay-hidden { opacity: 0; z-index: -1 !important; pointer-events: none; }
 
 .interaction-content {
@@ -115,53 +156,14 @@ img { max-width: 100%; height: auto; }
     .overlay-avatar-img { max-height: 120px; margin-bottom: 1rem; }
 }
 
+/* --- Reproductor de Video (Con Fixes para Edge) --- */
 .playback-video {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     object-fit: cover; border-radius: inherit; z-index: 40;
-    background: #000; transition: opacity 0.5s ease; pointer-events: none;
+    background: #000; pointer-events: none;
+    /* ✅ FIXES PARA EDGE/CHROME: Fuerza aceleración por hardware ✅ */
+    transform: translateZ(0); -webkit-transform: translateZ(0);
+    will-change: opacity, visibility; backface-visibility: hidden;
 }
-.video-hidden { opacity: 0; visibility: hidden; }
-
-/* =========================================
-   ✅ NUEVOS ESTILOS: MODAL DE PIN ✅
-   ========================================= */
-.pin-modal {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.85); /* Fondo oscuro */
-    z-index: 11000; /* Muy alto para tapar todo */
-    display: flex; justify-content: center; align-items: center;
-    opacity: 0; visibility: hidden; pointer-events: none;
-    transition: all 0.4s ease;
-}
-/* Clase para mostrar el modal */
-.pin-modal.active { opacity: 1; visibility: visible; pointer-events: auto; }
-
-.pin-modal-content {
-    background: rgba(255, 255, 255, 0.1); /* Estilo cristal */
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 40px; border-radius: 20px; text-align: center; color: white;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-    transform: translateY(30px); transition: transform 0.4s ease;
-}
-.pin-modal.active .pin-modal-content { transform: translateY(0); }
-
-.pin-icon { font-size: 3rem; color: var(--first-color); margin-bottom: 1rem; }
-.pin-modal-content h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-.pin-modal-content p { margin-bottom: 1.5rem; opacity: 0.8; }
-
-/* Input de contraseña con asteriscos */
-#pin-input {
-    width: 100%; padding: 15px; font-size: 1.5rem; text-align: center;
-    border: none; border-radius: 10px; margin-bottom: 20px;
-    background: rgba(255, 255, 255, 0.9); color: #333; letter-spacing: 5px;
-    outline: none; transition: box-shadow 0.3s;
-}
-#pin-input:focus { box-shadow: 0 0 0 3px rgba(31, 101, 194, 0.5); }
-
-.pin-btn {
-    width: 100%; padding: 15px; border: none; border-radius: 10px;
-    background: var(--first-color); color: white; font-size: 1.1rem; font-weight: 600;
-    cursor: pointer; transition: background 0.3s;
-}
-.pin-btn:hover { background: #164a91; }
+/* ✅ Usamos display: none para asegurar que se oculte en Edge ✅ */
+.video-hidden { display: none !important; opacity: 0; visibility: hidden; }
