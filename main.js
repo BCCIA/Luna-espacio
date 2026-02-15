@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!overlay || !btnShowAvatar || !btnPlayVideo || !videoElement) return;
 
-    const VIDEO_URL = "https://www.dropbox.com/scl/fi/bsd9ksydqvtuq2iwxmef8/foto-luna.mp4?rlkey=dqdqthp3g9teg5jd36oo5irnt&st=ajetasrp&raw=1";
+    const VIDEO_URL = "https://www.dropbox.com/scl/fi/ff0ec6i5q92dp3qoepz6d/Foto-espacial.mp4?rlkey=0if4aqvw00pxt5o4q83ua45p1&st=ziy6a2km&raw=1";
     videoElement.src = VIDEO_URL;
 
     function showOverlay() {
