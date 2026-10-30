@@ -34,6 +34,9 @@
 
         <div class="home-img">
             <div id="chat-container" class="fade-in">
+                <!-- Contenedor donde el SDK de D-ID monta el agente -->
+                <div id="did-agent-container" class="iframe-wrapper"></div>
+
                 <!-- Capa de bloqueo invisible (al hacer clic abre el modal) -->
                 <div id="lock-overlay" title="Toque para iniciar sesión"></div>
 
@@ -72,5 +75,17 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="main.js"></script>
+
+    <!-- Agente D-ID (SDK oficial: studio.d-id.com ya no permite embeber por iframe) -->
+    <script type="module"
+      src="https://agent.d-id.com/v2/index.js"
+      data-mode="full"
+      data-client-key="Z29vZ2xlLW9hdXRoMnwxMTM5OTMxMzY2NjM2NDU1NzU2MzM6N0dkYkl3OHkzQ1JpbHNtemxwWXg4"
+      data-agent-id="v2_agt_qXO5L4h5"
+      data-name="did-agent"
+      data-monitor="true"
+      data-light-mode="false"
+      data-target-id="did-agent-container">
+    </script>
   </body>
 </html>
